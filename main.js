@@ -1,6 +1,6 @@
 // add
 function getSum(num1, num2) {
-  return num1 + num2;
+  return Number(num1) + Number(num2);
 }
 
 // subtract
@@ -19,6 +19,7 @@ function getQuotient(num1, num2) {
 }
 
 function operate(operator, num1, num2) {
+
   switch (operator) {
     case '+':
       return getSum(num1, num2);
@@ -31,28 +32,79 @@ function operate(operator, num1, num2) {
     default:
       console.error('Unknown operator');
   }
+
 }
 
-let num1 = 1;
-let num2 = -0.5;
-let operator = '/';
-
-console.log(operate(operator, num1, num2));
-
-const calculatorDisplay = document.querySelector('.display');
-
+let num1;
+let num2;
+let operator = '';
 let displayValue = '';
+
+const display = document.querySelector('.display');
+const digitButtons = document.querySelectorAll('.digit');
+const operatorButtons = document.querySelectorAll('.operator');
+const equalsButton = document.querySelector('button[value="="]');
+const clearButton = document.querySelector('button[type="reset"]');
+
+function updateDisplay() {
+  display.textContent = displayValue;
+}
 
 function handleDigitButtonClick(e) {
   const digit = e.target.value;
   console.log(digit);
-  displayValue += digit;
-  calculatorDisplay.textContent = displayValue;
+  
+  if (num2) {
+    displayValue = digit;
+    num2 = null;
+  } else {
+    displayValue = displayValue.concat(digit);
+  }
+
+  updateDisplay();
 }
 
-const digitButtons = document.querySelectorAll('.digit');
+function handleOperatorButtonClick(e) {
+  if (operator) {
+    handleEqualsButtonClick();
+  }
+  operator = e.target.value;
+  num1 = displayValue;
+  displayValue = '';
+  console.log("operator", operator);
+  console.log("num1 (displayValue)", num1);
+}
+
+function handleEqualsButtonClick() {
+  num2 = displayValue;
+  console.log("num2", num2);
+  console.log("operator", operator);
+  
+  if (!num2 || !operator) {
+    return;
+  }
+  
+  displayValue = +operate(operator, num1, num2).toFixed(9);
+  console.log("displayValue", displayValue);
+  updateDisplay();
+
+  operator = '';
+}
 
 digitButtons.forEach((button) => {
-  button.addEventListener('click', handleDigitButtonClick);
+  button.onclick = handleDigitButtonClick;
 });
 
+operatorButtons.forEach((button) => {
+  button.onclick = handleOperatorButtonClick;
+});
+
+equalsButton.onclick = handleEqualsButtonClick;
+
+clearButton.onclick = () => {
+  num1 = null;
+  num2 = null;
+  operator = '';
+  displayValue = '';
+  updateDisplay();
+};
