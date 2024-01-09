@@ -38,3 +38,21 @@ let num2 = -0.5;
 let operator = '/';
 
 console.log(operate(operator, num1, num2));
+
+const calculatorDisplay = document.querySelector('.display');
+
+let displayValue = '';
+
+function handleDigitButtonClick(e) {
+  const digit = e.target.value;
+  console.log(digit);
+  displayValue += digit;
+  calculatorDisplay.textContent = displayValue;
+}
+
+const digitButtons = document.querySelectorAll('.digit');
+
+digitButtons.forEach((button) => {
+  button.addEventListener('click', handleDigitButtonClick);
+});
+
