@@ -83,6 +83,11 @@ function handleEqualsButtonClick() {
   if (!num2 || !operator) {
     return;
   }
+
+  if (num2 === '0' && operator === '/') {
+    alert('Division by zero is undefined');
+    return;    
+  }
   
   displayValue = +operate(operator, num1, num2).toFixed(9);
   console.log("displayValue", displayValue);
